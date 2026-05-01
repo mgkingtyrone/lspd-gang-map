@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>LSPD Gang Territory Database</title>
+  <style>
+    body { font-family: Arial; margin: 20px; background: #111; color: #0f0; }
+    h1 { color: #0f0; }
+    input { padding: 12px; width: 300px; font-size: 18px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #0f0; padding: 10px; text-align: left; }
+    th { background: #222; }
+    .result { margin-top: 20px; padding: 15px; background: #222; border: 2px solid #0f0; }
+    .gang-name { font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>🚔 LSPD Gang Territory Database</h1>
+  <p><strong>Enter Postal Code:</strong></p>
+  <input type="text" id="search" placeholder="e.g. 305" onkeyup="searchPostal()">
+  
+  <div id="result" class="result" style="display:none;"></div>
+
+  <h2>Full Territory List</h2>
+  <table id="table">
+    <tr><th>Gang</th><th>Postals</th><th>Colors</th><th>Known Weapons</th><th>Known Members</th><th>Notes</th></tr>
+  </table>
+
+  <script>
+    const territories = [
+      {
+        gang: "Monteros",
+        postals: ["303","304","305","314","315","316","324","325","326"],
+        colors: "Green / Blue",
+        weapons: "Pink handgun with drum magazine (observed)",
+        members: ["Kelly Rutledge", "Issac Montero", "Andre Montero", "Brix Montero", "Ryleigh Nova", "Wade Wilson", "SJ (@breezy)"],
+        notes: "New suspected gang. Fresh tagging observed."
+      },
+      {
+        gang: "UVMC",
+        postals: ["411","412","425","426","434","436"],
+        colors: "Unknown",
+        weapons: "Unknown",
+        members: [],
+        notes: "Added per intel."
+      },
+      {
+        gang: "MBF",
+        postals: ["179","180","183","187","188"],
+        colors: "Unknown",
+        weapons: "Unknown",
+        members: [],
+        notes: "Added per intel."
+      },
+      {
+        gang: "AODMC",
+        postals: ["164","165","169","171","173"],
+        colors: "Unknown",
+        weapons: "Unknown",
+        members: [],
+        notes: "Territory extends just west of the canals up to the listed postals."
+      },
+      {
+        gang: "Bloodline",
+        postals: ["62","65","66","69"],
+        colors: "Red",
+        weapons: "Unknown",
+        members: [],
+        notes: "Added per intel."
+      },
+      {
+        gang: "The Company",
+        postals: ["31","33","34","44","48","49"],
+        colors: "Unknown",
+        weapons: "Unknown",
+        members: [],
+        notes: "Added per intel."
+      },
+      {
+        gang: "Southside Reapers (SSR)",
+        postals: ["11","110","112","120","121","122"],
+        colors: "Dark Blue",
+        weapons: "Unknown",
+        members: [],
+        notes: "Added per intel."
+      },
+      {
+        gang: "Vendetta",
+        postals: ["105","106","107","108","109"],
+        colors: "Baby Blue",
+        weapons: "Unknown",
+        members: [],
+        notes: "Added per intel."
+      },
+      {
+        gang: "Akuma",
+        postals: ["103","104","115","116","117","126","127","134"],
+        colors: "Pink / Light Red",
+        weapons: "Unknown",
+        members: [],
+        notes: "Added per intel."
+      },
+      {
+        gang: "Saints",
+        postals: ["719"],
+        colors: "White / Black",
+        weapons: "Unknown",
+        members: [],
+        notes: "Added per intel."
+      },
+      {
+        gang: "Statik",
+        postals: ["552","557","558","559","565","566","573","587"],
+        colors: "Unknown",
+        weapons: "Unknown",
+        members: [],
+        notes: "Added per intel."
+      },
+      {
+        gang: "White Fang",
+        postals: ["844"],
+        colors: "Red / White",
+        weapons: "Unknown",
+        members: [],
+        notes: "Territory extends to Marlow and west to North Rockford Dr."
+      },
+      {
+        gang: "DH",
+        postals: ["639","640","641","642","648","649","650","651"],
+        colors: "Unknown",
+        weapons: "Unknown",
+        members: [],
+        notes: "Added per intel."
+      },
+      {
+        gang: "NCC",
+        postals: ["657","658","654","655","653"],
+        colors: "Purple",
+        weapons: "Unknown",
+        members: [],
+        notes: "Added per intel."
+      }
+    ];
+
+    function searchPostal() {
+      const input = document.getElementById("search").value.trim();
+      const resultDiv = document.getElementById("result");
+      resultDiv.style.display = "none";
+
+      if (!input) return;
+
+      const found = territories.find(t => t.postals.includes(input));
+
+      if (found) {
+        resultDiv.innerHTML = `
+          <strong>Gang:</strong> ${found.gang}<br>
+          <strong>Colors:</strong> ${found.colors}<br>
+          <strong>Known Weapons:</strong> ${found.weapons}<br>
+          <strong>Known Members:</strong> ${found.members.length ? found.members.join(", ") : "None listed"}<br>
+          <strong>Notes:</strong> ${found.notes}
+        `;
+        resultDiv.style.display = "block";
+      } else {
+        resultDiv.innerHTML = `<strong style="color:#f00;">No gang territory found for postal ${input}</strong>`;
+        resultDiv.style.display = "block";
+      }
+    }
+
+    // Build table with color-coded gang names
+    const table = document.getElementById("table");
+    territories.forEach(t => {
+      const row = table.insertRow();
+      let colorStyle = '';
+      if (t.colors.includes("Green")) colorStyle = 'color:#00ff00;';
+      else if (t.colors.includes("Red")) colorStyle = 'color:#ff0000;';
+      else if (t.colors.includes("Blue")) colorStyle = 'color:#0088ff;';
+      else if (t.colors.includes("Pink")) colorStyle = 'color:#ff69b4;';
+      else if (t.colors.includes("White")) colorStyle = 'color:#ffffff;';
+      else if (t.colors.includes("Baby Blue")) colorStyle = 'color:#89cff0;';
+      else if (t.colors.includes("Dark Blue")) colorStyle = 'color:#00008b;';
+      else if (t.colors.includes("Light Red")) colorStyle = 'color:#ff6666;';
+      else if (t.colors.includes("Purple")) colorStyle = 'color:#a020f0;';
+
+      row.innerHTML = `<td class="gang-name" style="${colorStyle}">${t.gang}</td><td>${t.postals.join(", ")}</td><td>${t.colors}</td><td>${t.weapons}</td><td>${t.members.join("<br>") || "None listed"}</td><td>${t.notes}</td>`;
+    });
+  </script>
+</body>
+</html>
